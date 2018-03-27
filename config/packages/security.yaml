@@ -1,7 +1,17 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        Symfony\Component\Security\Core\User\User: bcrypt
     providers:
-        in_memory: { memory: ~ }
+        in_memory:
+            memory:
+                users:
+                    ryan:
+                        password: 1234
+                        roles: 'ROLE_USER'
+                    admin:
+                        password: $2y$13$PHK6OpLIijX82Z2fu8AIletgrsOMtwMRMQOaAbcPbRGcdpL7R6Ib.
+                        roles: 'ROLE_ADMIN'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -14,11 +24,13 @@ security:
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: true
+            form_login:
+                login_path: login
+                check_path: login
             # https://symfony.com/doc/current/security/form_login_setup.html
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

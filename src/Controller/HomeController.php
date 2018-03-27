@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: allse
- * Date: 23.03.2018
- * Time: 17:37
- */
 
 namespace App\Controller;
 
-use App\Service\Calculator;
+use App\Entity\Answer;
+use App\Entity\Question;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,22 +15,26 @@ class HomeController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('home/index.html.twig', ['title' => 'stasik loh']);
-    }
+        $question = new Question();
+        $question->setTextQuestion('Стасик лох?');
 
-    /**
-     * @Route("/sum/{a}/{b}",name="home.sum")
-     * @param Calculator $calculator
-     * @param $a
-     * @param $b
-     * @return Response
-     */
-    public function sumAction(Calculator $calculator, $a, $b)
-    {
-        return $this->render('home/sum.html.twig', [
-            'a' => $a,
-            'b' => $b,
-            'sum' => $calculator->sum((int)$a, (int)$b),
-        ]);
+        $answer = new Answer();
+        $answer->setTextAnswer('Да');
+        $answer->setIsCorrect(true);
+        $answer->setQuestion($question);
+
+        $answerYes = new Answer();
+        $answerYes->setTextAnswer('Да');
+        $answerYes->setIsCorrect(false);
+        $answerYes->setQuestion($question);
+
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($question);
+        $em->persist($answer);
+        $em->persist($answerYes);
+
+        $em->flush();
+
+        return new Response("kke");
     }
 }
